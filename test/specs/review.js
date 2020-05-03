@@ -1,4 +1,4 @@
-
+const request = require('request');
 browser.addCommand("submitReview",function (email, review) {
     if (email) {
         //enter the email address
@@ -41,11 +41,21 @@ describe('The product review form', function () {
 
         //assert that error message is now showing
     })
-    it.only('should focus on the first invalid on error',function () {
+    it('should focus on the first invalid on error',function () {
         const emailHasFocus = $('#review-email').hasFocus();
         expect(emailHasFocus, "email should not have focus").to.be.false;
 
         browser.elementSubmit("form");
-
     })
+    it.only('should allow multiple reviews', function () {
+       const res = request('GET','http://jsonplaceholder.typicode.com/posts/1/comments');
+       const comments = JSON.parse(res.body().toString('utf-8'));
+
+       //for loop
+        comments.forEach(function (comment, idx){
+            browser.submitReview(comment,email, comment.name);
+            const email = browser.getText(".reviews > .comment:nth-of-type("+ (idx + 3) +") .email");
+            expect(email).to.be.equal(comment,email);
+        })
+    });
 })

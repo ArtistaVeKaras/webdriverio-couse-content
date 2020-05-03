@@ -1,4 +1,5 @@
-var baseUrl = 'http://127.0.0.1:8303'
+let baseUrl = 'http://127.0.0.1:8303';
+let notifier = require('node-notifier');
 
 if (process.env.SERVER === "prod"){
     baseUrl = 'http://www.kevinlamping.com/webdriverio-course-content/';
@@ -155,8 +156,12 @@ exports.config = {
      * @param {Object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    // onPrepare: function (config, capabilities) {
-    // },
+    onPrepare: function (config, capabilities) {
+        notifier.notify({
+            title: 'WebdriverIO',
+            message: 'Test run started'
+        })
+    },
     /**
      * Gets executed before a worker process is spawned and can be used to initialise specific service
      * for that worker as well as modify runtime environments in an async fashion.
@@ -187,7 +192,7 @@ exports.config = {
         expect = require('chai').expect;
         should = require('chai').should;
         assert = require('chai').assert;
-    }
+    },
     // },
     /**
      * Runs before a WebdriverIO command gets executed.
@@ -222,9 +227,15 @@ exports.config = {
     /**
      * Function to be executed after a test (in Mocha/Jasmine).
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
-    // },
-
+    afterTest: function(test, context, { error, result, duration, passed, retries }) {
+        if (!test.passed) {
+            notifier.notify({
+                title: 'Test failure!',
+                message: test.parent + ' ' + test.title
+            })
+        }
+    },
+    //
 
     /**
      * Hook that gets executed after the suite has ended
@@ -266,8 +277,12 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    // onComplete: function(exitCode, config, capabilities, results) {
-    // },
+    onComplete: function(exitCode, config, capabilities, results) {
+        notifier.notify({
+            title: 'WebdrioIO',
+            message: 'Tests finished running.'
+        })
+    },
     /**
     * Gets executed when a refresh happens.
     * @param {String} oldSessionId session ID of the old session
