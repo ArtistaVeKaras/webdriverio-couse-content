@@ -1,4 +1,8 @@
-console.log('here');
+var baseUrl = 'http://127.0.0.1:8303'
+
+if (process.env.SERVER === "prod"){
+    baseUrl = 'http://www.kevinlamping.com/webdriverio-course-content/';
+}
 exports.config = {
     //
     // ====================
@@ -67,7 +71,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'silent',
     //
     // Set specific log levels per logger
     // loggers:
@@ -94,7 +98,7 @@ exports.config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    baseUrl: 'http://127.0.0.1:8303/',
+    baseUrl: baseUrl,
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -136,7 +140,7 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         ui: 'bdd',
-        timeout: 60000
+        timeout: 90000
     },
     //
     // =====
@@ -179,7 +183,11 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {Array.<String>} specs List of spec file paths that are to be run
      */
-    // before: function (capabilities, specs) {
+    before: function (capabilities, specs) {
+        expect = require('chai').expect;
+        should = require('chai').should;
+        assert = require('chai').assert;
+    }
     // },
     /**
      * Runs before a WebdriverIO command gets executed.

@@ -2,20 +2,21 @@
 // const webdriverio = require('webdriverio');
 // const options = {desiredCapabilities: { browserName: 'chrome'} };
 // const client = webdriverio.remote(options);
-
+// const expect = require('chai').expect; this no longer needs to be included in all the files as is added to config file
 describe('Shop CTA Button', function () {
     it('should link to the product page', function () {
         browser.url('./');
 
         const title = browser.getTitle()
-        console.log('Title is:', title);
+        expect(title).to.equal( "Robot Parts Emporium");
 
-        var pressButton = $('.shop-callout a')
+        const pressButton = $('.shop-callout a')
         pressButton.click()
+        browser.debug();
         const productTitle = browser.getTitle();
-        console.log('Title is: ' + productTitle);
+        expect(productTitle).to.equal("Totally Not Evil Sentient Robot - Robot Parts Emporium");
 
         const url = browser.getUrl()
-        console.log('urL is: ', url);
+        expect(url).to.include('product-page.html', 'URL mismatch');
     })
 })
