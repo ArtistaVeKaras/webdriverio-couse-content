@@ -1,12 +1,8 @@
+const cart = require('./cart.page');
+
 describe("Cart Functionality", function () {
     const btn = "#buyNowButton";
     const qty = "#qty";
-
-    const cart = {
-        get btn() { return $(btn); },
-        get qty() { return $(qty); },
-        // get thankyou() { return $(".callout*=Thank you human"); }
-    }
 
     beforeEach(function () {
         browser.url('/product-page.html')

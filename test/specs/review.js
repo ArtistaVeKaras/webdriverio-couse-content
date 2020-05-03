@@ -1,14 +1,8 @@
-const request = require('request');
+const request = require('request')
+const request = require('sync-request');
+const reviewForm = require('./reviewForm.page');
 browser.addCommand("submitReview",function (email, review) {
-    if (email) {
-        //enter the email address
-        browser.setValue("#review-email", email);
-    }
-    if (review) {
-        //enter comment
-        browser.setValue("#review-content", review);
-    }
-    browser.submitForm("#review-content");
+
 })
 describe('The product review form', function () {
     beforeEach(function () {
