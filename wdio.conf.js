@@ -1,10 +1,23 @@
+// let secrets = require('./secret');
 let baseUrl = 'http://127.0.0.1:8303';
 let notifier = require('node-notifier');
 
 if (process.env.SERVER === "prod"){
     baseUrl = 'http://www.kevinlamping.com/webdriverio-course-content/';
 }
+
+var caps = {
+    'browserstack.user' : 'artistavekaras1',
+    'browserstack.key' : 'LStJ5QWqZh8TW7kE7Tf7'
+}
+
+var timeout = process.env.DEBUG ? 9999999 : 60000
 exports.config = {
+    //broswerstack config
+    // user: process.env.BROWSERSTACK_USERNAME,
+    // key: process.env.BROWSERSTACK_KEY,
+    browserstackLocal: true,
+
     //
     // ====================
     // Runner Configuration
@@ -59,11 +72,12 @@ exports.config = {
         maxInstances: 5,
         //
         browserName: 'chrome',
+        'browserstack.local': true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
-    }],
+    }, caps],
     sync: true,
     //
     // ===================
@@ -102,7 +116,7 @@ exports.config = {
     baseUrl: baseUrl,
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+    waitforTimeout: timeout,
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
@@ -110,12 +124,12 @@ exports.config = {
     //
     // Default request retries count
     connectionRetryCount: 3,
-    //
+    ///
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone'],
+    services: ['selenium-standalone','browserstack'],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
