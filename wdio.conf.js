@@ -1,6 +1,8 @@
 // let secrets = require('./secret');
 let baseUrl = 'http://127.0.0.1:8303';
 let notifier = require('node-notifier');
+let path = require('path');
+let VisualRegressionCompare = require('wdio-visual-regression-service/compare');
 
 if (process.env.SERVER === "prod"){
     baseUrl = 'http://www.kevinlamping.com/webdriverio-course-content/';
@@ -12,6 +14,18 @@ var caps = {
 }
 
 var timeout = process.env.DEBUG ? 9999999 : 60000
+
+function getScreenShotname(folder, context){
+    var type = context.type;
+    var testName = context.test.title;
+    var browserVersion = parseInt(context.browser.verbar,10);
+    var browserName = context.browser.name;
+    var browserViewport = context.meta.width;
+    var browserWidth = browserViewport.width;
+    var browserHeight = browserHeight.height;
+
+    return path.join(process.cwd(), folder, )
+}
 exports.config = {
     //broswerstack config
     // user: process.env.BROWSERSTACK_USERNAME,
@@ -129,7 +143,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone','browserstack'],
+    services: ['selenium-standalone','visual-regression'],
     
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -148,7 +162,15 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter.html
-    reporters: ['dot'],
+    reporters: ['dot', 'allure'],
+    reporterOption: {
+        junit: {
+            outputDir: './'
+        },
+        allure: {
+            outputDir: 'allure-results'
+        }
+    },
  
     //
     // Options to be passed to Mocha.
@@ -156,6 +178,13 @@ exports.config = {
     mochaOpts: {
         ui: 'bdd',
         timeout: 90000
+    },
+    visualRegression:{
+        compare: new VisualRegressionCompare.LocalCompare({
+            referenceName:'',
+            screenshotName:'',
+            diffName:''
+        })
     },
     //
     // =====
